@@ -1,3 +1,5 @@
+#testing
+
 ### Guess counts initialisation ###
 
 guess_counts_player_1 = 15
@@ -34,7 +36,7 @@ game_grid_player_2 = initialise_board()
 ### Selection Stage ###
 
 def selection_ships(board, ship_size, ship_name):
-    
+
     while True:
         print("\n Current Board: ") ### Showing this is the current board form ###
         print_board(board) ### Outputs the board ###
@@ -48,7 +50,7 @@ def selection_ships(board, ship_size, ship_name):
             print(error) ### The error will be outputted to the user ###
             continue ### The rest of the program will continue as usual once there is no error in the input ###
 
-
+        #test
         direction = input("Enter orientation (V if you would like to place it vertically) and (H if you would like to place it horizontally): ").upper() ### This line is demanding input from the player depending on whether they would like to place their ship vertically or horizontally. The user input is changed to uppercase ###
 
         if direction == "H" and start_x + ship_size <= 6: ### A conditional statement which is going to run if the user inputs H. It will only run if the ship will be able to fit in the grid ###
