@@ -6,6 +6,8 @@
 ### 4: Using generalisation for t=while loop in play game function
 ### 5: Animations, colours, etc.
 
+from colorama import Fore, init
+
 ### Guess counts initialisation ###
 
 guess_counts_player_1 = 15
@@ -44,21 +46,21 @@ game_grid_player_2 = initialise_board()
 def selection_ships(board, ship_size, ship_name):
 
     while True:
-        print("\n Current Board: ") ### Showing this is the current board form ###
-        print_board(board) ### Outputs the board ###
-        print(f"Place your {ship_name} (size {ship_size}).") ### Informs the user that they will now have to place the different ships and also informs them of the ship size ###
-        start_coordinates = input("Enter starting coordinates: (e.g. A1):   ") ### It is asking for one coordinate which will act as the pivot for the placement of the other coordinates according to validity ###
+        print("\n Current Board: ")                                                                                                                             ### Showing this is the current board form ###
+        print_board(board)                                                                                                                                      ### Outputs the board ###
+        print(f"Place your {ship_name} (size {ship_size}).")                                                                                                    ### Informs the user that they will now have to place the different ships and also informs them of the ship size ###
+        start_coordinates = input("Enter starting coordinates: (e.g. A1):   ")                                                                                  ### It is asking for one coordinate which will act as the pivot for the placement of the other coordinates according to validity ###
 
         try:
-            start_x, start_y = convert_coordinates(start_coordinates) ### The x and y coordinates are going to store the starting coordinate values after the coordinates have been converted into list index form as a result of the convert_coordinates function being called ###
+            start_x, start_y = convert_coordinates(start_coordinates)                                                                                           ### The x and y coordinates are going to store the starting coordinate values after the coordinates have been converted into list index form as a result of the convert_coordinates function being called ###
         
-        except ValueError as error: ### If there is an error. it will be stored in the variable error ###
-            print(error) ### The error will be outputted to the user ###
-            continue ### The rest of the program will continue as usual once there is no error in the input ###
+        except ValueError as error:                                                                                                                             ### If there is an error. it will be stored in the variable error ###
+            print(error)                                                                                                                                        ### The error will be outputted to the user ###
+            continue                                                                                                                                            ### The rest of the program will continue as usual once there is no error in the input ###
 
-        direction = input("Enter orientation (V if you would like to place it vertically) and (H if you would like to place it horizontally): ").upper() ### This line is demanding input from the player depending on whether they would like to place their ship vertically or horizontally. The user input is changed to uppercase ###
+        direction = input("Enter orientation (V if you would like to place it vertically) and (H if you would like to place it horizontally): ").upper()        ### This line is demanding input from the player depending on whether they would like to place their ship vertically or horizontally. The user input is changed to uppercase ###
 
-        if direction == "H" and start_x + ship_size <= 6: ### A conditional statement which is going to run if the user inputs H. It will only run if the ship will be able to fit in the grid ###
+        if direction == "H" and start_x + ship_size <= 6:                                                                                                       ### A conditional statement which is going to run if the user inputs H. It will only run if the ship will be able to fit in the grid ###
 
             if all(board[start_y][start_x + i] == "~" for i in range(ship_size)): ### The all function returns a boolean depending on it's parameter. The parameter of the function is a validation method which makes sure the following square which will hold part of the ship is empty. ###
                 for i in range (ship_size): ### The loop will repeat depending on how many grid spaces the ship takes 3, 2, 1
@@ -148,7 +150,8 @@ def check_game_over(board):
 
 def play_game():
 
-    print("Welcome to Moveable Ships! A Battleship Variant!") ### Outputting welcome message ###
+    print(Fore.RED + "Welcome to Moveable Ships! A Battleship Variant!") ### Outputting welcome message ###
+    print(Fore.WHITE + "")
     player_1_name = input("What is your name player 1? : ") ### Storing player 1 name input ###
     player_2_name = input("What is your name player 2? : ") ### Storing player 2 name input ###
 
@@ -179,15 +182,16 @@ def play_game():
 
     ### PLAYER 1 ###
         
-        print(f"{player_1_name}'s turn. Remaining guesses: {max_moves - player_1_moves}") ### Printing that it is player 1's turn and outputting remaining guesses ###
+        print(Fore.GREEN + f"{player_1_name}'s turn. Remaining guesses: {max_moves - player_1_moves}") ### Printing that it is player 1's turn and outputting remaining guesses ###
+        print(Fore.WHITE + "")
         print_board(player_2_board, hide_ships = True) ### Calling the print board function and passing in player 2's board. The ships are being hidden because we don't want player 1 to see player 2's ship locations ###
         x, y = get_guess() ### Storing the guess input in x and y coordinates
         if process_guess(player_2_board, x, y): ### If a ship has been hit ... ###
             player_1_score += 1 ### Player 1's score is incremented by 1 ###
         player_1_moves += 1 ### Player 1's moves are also incremented by 1 ###
 
-        if player_1_moves % 5 == 0 and player_1_moves <= max_moves: ### If the player moves when divided by 5 have no remainder and player moves are less than or equal to the maximum number of moves ... ###
-            move = input("Do you want to move your large ship? (Y/N)").upper() ### Asking whether the player wants to move their large ship. Their input is converted into uppercase. ###
+        if player_1_moves % 5 == 0 and player_1_moves <= max_moves:                                             ### If the player moves when divided by 5 have no remainder and player moves are less than or equal to the maximum number of moves ... ###
+            move = input("Do you want to move your large ship? (Y/N)").upper()                                  ### Asking whether the player wants to move their large ship. Their input is converted into uppercase. ###
             if move == "Y": ### If the answer to the question is Y, then ... ###
                 move_large_ship(player_1_board) ### The move_large_ship function is called and performs it's role of oving the ship and updating the board ###
 
@@ -201,7 +205,7 @@ def play_game():
 
     ### PLAYER 2 ###
 
-        print(f"{player_2_name}'s turn. Remaining guesses: {max_moves - player_2_moves}") ### Printing that it is player 1's turn and outputting remaining guesses ###
+        print(Fore.GREEN + f"{player_2_name}'s turn. Remaining guesses: {max_moves - player_2_moves}") ### Printing that it is player 1's turn and outputting remaining guesses ###
         print_board(player_1_board, hide_ships = True) ### Calling the print board function and passing in player 2's board. The ships are being hidden because we don't want player 1 to see player 2's ship locations ###
         x, y = get_guess() ### Storing the guess input in x and y coordinates
         if process_guess(player_1_board, x, y): ### If a ship has been hit ... ###
@@ -227,10 +231,12 @@ def play_game():
     print(f"FINAL SCORE: {player_1_name} : {player_1_score}, {player_2_name} : {player_2_score}") ### Outputting player scores in the format NAME:SCORE
 
     if player_1_score > player_2_score: ### If player 1 score is greater than player 2 score ... ###
-        print(f"{player_1_name} WINS") ### Output player 1 wins ###
+        print(Fore.BLUE + f"{player_1_name} WINS") ### Output player 1 wins ###
+        print(Fore.WHITE + "")
         
     elif player_2_score > player_1_score: ### If player 2 score is greater than player 1 score ... ###
-        print(f"{player_2_name} WINS") ### Output player 2 wins ###
+        print(Fore.BLUE + f"{player_2_name} WINS") ### Output player 2 wins ###
+        print(Fore.WHITE + "")
 
     else: ### Otherwise ... ###
         print("TIE") ### Output tie ###
