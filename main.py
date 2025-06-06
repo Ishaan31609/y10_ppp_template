@@ -48,7 +48,8 @@ def selection_ships(board, ship_size, ship_name):
     while True:
         print("\n Current Board: ")                                                                                                                             ### Showing this is the current board form ###
         print_board(board)                                                                                                                                      ### Outputs the board ###
-        print(f"Place your {ship_name} (size {ship_size}).")                                                                                                    ### Informs the user that they will now have to place the different ships and also informs them of the ship size ###
+        print(Fore.LIGHTYELLOW_EX + f"Place your {ship_name} (size {ship_size}).")                                                                                                    ### Informs the user that they will now have to place the different ships and also informs them of the ship size ###
+        print(Fore.WHITE + "")
         start_coordinates = input("Enter starting coordinates: (e.g. A1):   ")                                                                                  ### It is asking for one coordinate which will act as the pivot for the placement of the other coordinates according to validity ###
 
         try:
@@ -145,7 +146,7 @@ def move_large_ship(board):
 
 def check_game_over(board):
     return all(cell != "S" for row in board for cell in row)                                                                                                    ### If there are no remaining cells with S then the game has ended as the S character is replaced with X if guessed correctly or ~ if the ship has been moved ###
-    
+
 ### Main game loop ###
 
 def play_game():
@@ -158,14 +159,14 @@ def play_game():
     player_1_board = initialise_board()                                                                                                                         ### Initialising player 1 board ###
     player_2_board = initialise_board()                                                                                                                         ### Initialising player 2 board ###
 
-    print(f"{player_1_name}, PLACE YOUR SHIPS.")                                                                                                                ### Asserting player 1 by their name and letting them know that they now have to place their ships ###
-    
+    print(Fore.CYAN + f"{player_1_name}, PLACE YOUR SHIPS.")                                                                                                    ### Asserting player 1 by their name and letting them know that they now have to place their ships ###
+    print(Fore.WHITE + "")
     selection_ships(player_1_board, 3, "Large Ship")                                                                                                            ### Calling selection_ship function for large ship for player 1 ###
     selection_ships(player_1_board, 2, "Medium Ship")                                                                                                           ### Calling selection_ship function for medium ship for player 1 ###
     selection_ships(player_1_board, 1, "Small Ship")                                                                                                            ### Calling selection_ship function for small ship for player 1 ###
 
-    print(f"{player_2_name}, PLACE YOUR SHIPS.")                                                                                                                ### Asserting player 2 by their name and letting them know that they now have to place their ships ###
-    
+    print(Fore.CYAN + f"{player_2_name}, PLACE YOUR SHIPS.")                                                                                                    ### Asserting player 2 by their name and letting them know that they now have to place their ships ###
+    print(Fore.WHITE + "")
     selection_ships(player_2_board, 3, "Large Ship")                                                                                                            ### Calling selection_ship function for large ship for player 2 ###
     selection_ships(player_2_board, 2, "Medium Ship")                                                                                                           ### Calling selection_ship function for medium ship for player 2 ###
     selection_ships(player_2_board, 1, "Small Ship")                                                                                                            ### Calling selection_ship function for small ship for player 2 ###
@@ -206,6 +207,7 @@ def play_game():
     ### PLAYER 2 ###
 
         print(Fore.GREEN + f"{player_2_name}'s turn. Remaining guesses: {max_moves - player_2_moves}")                                                          ### Printing that it is player 1's turn and outputting remaining guesses ###
+        print(Fore.WHITE + "")
         print_board(player_1_board, hide_ships = True)                                                                                                          ### Calling the print board function and passing in player 2's board. The ships are being hidden because we don't want player 1 to see player 2's ship locations ###
         x, y = get_guess()                                                                                                                                      ### Storing the guess input in x and y coordinates
         if process_guess(player_1_board, x, y):                                                                                                                 ### If a ship has been hit ... ###
