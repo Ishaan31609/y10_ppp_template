@@ -230,7 +230,7 @@ def play_game():
 
     ### Dealing with scoring system ###
 
-    print(f"FINAL SCORE: {player_1_name} : {player_1_score}, {player_2_name} : {player_2_score}")                                                               ### Outputting player scores in the format NAME:SCORE
+    print(Fore.GREEN + f"FINAL SCORE: {player_1_name} : {player_1_score}, {player_2_name} : {player_2_score}")                                                               ### Outputting player scores in the format NAME:SCORE
 
     if player_1_score > player_2_score:                                                                                                                         ### If player 1 score is greater than player 2 score ... ###
         print(Fore.BLUE + f"{player_1_name} WINS")                                                                                                              ### Output player 1 wins ###
