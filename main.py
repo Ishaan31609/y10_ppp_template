@@ -6,7 +6,7 @@
 ### 4: Using generalisation for t=while loop in play game function
 ### 5: Animations, colours, etc.
 
-from colorama import Fore, init
+from colorama import Fore
 
 ### Guess counts initialisation ###
 
