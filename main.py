@@ -5,6 +5,7 @@
 ### 3: Not asking ship movement question right before game ends 
 ### 4: Using generalisation for t=while loop in play game function
 ### 5: Animations, colours, etc.
+### 6: Updating grid with X or O for hit and miss / emojis
 
 from colorama import Fore
 
