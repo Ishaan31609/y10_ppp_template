@@ -1,11 +1,7 @@
 ### THINGS NEEDING WORK ON ###
 
-### 1: Response to empty string
-### 2: Dealing with false input on ship movement question
-### 3: Not asking ship movement question right before game ends 
-### 4: Using generalisation for t=while loop in play game function
-### 5: Animations, colours, etc.
-### 6: Updating grid with X or O for hit and miss / emojis
+### 4: Using generalisation for while loop in play game function
+
 
 from colorama import Fore
 
@@ -49,9 +45,9 @@ def selection_ships(board, ship_size, ship_name):
     while True:
         print("\n Current Board: ")                                                                                                                             ### Showing this is the current board form ###
         print_board(board)                                                                                                                                      ### Outputs the board ###
-        print(Fore.LIGHTYELLOW_EX + f"Place your {ship_name} (size {ship_size}).")                                                                                                    ### Informs the user that they will now have to place the different ships and also informs them of the ship size ###
+        print(Fore.LIGHTYELLOW_EX + f"Place your {ship_name} (size {ship_size}).")                                                                              ### Informs the user that they will now have to place the different ships and also informs them of the ship size ###
         print(Fore.WHITE + "")
-        start_coordinates = input("Enter starting coordinates: (e.g. A1):   ")                                                                                  ### It is asking for one coordinate which will act as the pivot for the placement of the other coordinates according to validity ###
+        start_coordinates = get_non_empty_input("Enter starting coordinates: (e.g. A1):   ")                                                                     ### It is asking for one coordinate which will act as the pivot for the placement of the other coordinates according to validity ###
 
         try:
             start_x, start_y = convert_coordinates(start_coordinates)                                                                                           ### The x and y coordinates are going to store the starting coordinate values after the coordinates have been converted into list index form as a result of the convert_coordinates function being called ###
@@ -60,7 +56,7 @@ def selection_ships(board, ship_size, ship_name):
             print(error)                                                                                                                                        ### The error will be outputted to the user ###
             continue                                                                                                                                            ### The rest of the program will continue as usual once there is no error in the input ###
 
-        direction = input("Enter orientation (V if you would like to place it vertically) and (H if you would like to place it horizontally): ").upper()        ### This line is demanding input from the player depending on whether they would like to place their ship vertically or horizontally. The user input is changed to uppercase ###
+        direction = get_non_empty_input("Enter orientation (V if you would like to place it vertically) and (H if you would like to place it horizontally): ").upper()        ### This line is demanding input from the player depending on whether they would like to place their ship vertically or horizontally. The user input is changed to uppercase ###
 
         if direction == "H" and start_x + ship_size <= 6:                                                                                                       ### A conditional statement which is going to run if the user inputs H. It will only run if the ship will be able to fit in the grid ###
 
@@ -107,7 +103,7 @@ def convert_coordinates(coord):
 def get_guess(): 
     
     while True: 
-        guess = input("Please enter bombing coordinates in the format A1: ")                                                                                    ### Asking for bombing coordinates input from user ###
+        guess = get_non_empty_input("Please enter bombing coordinates in the format A1: ")                                                                                    ### Asking for bombing coordinates input from user ###
         
         try:                                                                                                                                                    ### trying / testing code to check for errors ###
             return convert_coordinates(guess)                                                                                                                   ### The convert_coordinates function is called and the variable guess is passed in it. An error here would show an error in guess input ###
@@ -120,12 +116,13 @@ def get_guess():
 def process_guess(board, x, y):
     
     if board[y][x] == "S":                                                                                                                                      ### Checking whether after the x and y coordinates have been applied, if the input matches the opponents ship location ###
-        board[y][x] == "X"                                                                                                                                      ### Setting that area on the board as X standing for hit ###
+        board[y][x] = Fore.RED + "X" + Fore.RESET
+        Fore.WHITE + ""                                                                                                                                      ### Setting that area on the board as X standing for hit ###
         print("HIT!!!")                                                                                                                                         ### Outputting message HIT!!! ###
         return True                                                                                                                                             ### Returning true as a ship has been hit ###
 
     elif board[y][x] == "~":                                                                                                                                    ### Checking whether after the x and y coordinates have been applied, if the input does not match the opponents ship location ###
-        board[y][x] == "O"                                                                                                                                      ### Set that area on the board as O standing for miss ###
+        board[y][x] = Fore.BLUE + "O" + Fore.RESET                                                                                                                                     ### Set that area on the board as O standing for miss ###
         print("MISS")                                                                                                                                           ### Outputting message MISS ###
         return False                                                                                                                                            ### Returning false as a ship has not been hit ###
 
@@ -154,8 +151,8 @@ def play_game():
 
     print(Fore.RED + "Welcome to Moveable Ships! A Battleship Variant!")                                                                                        ### Outputting welcome message ###
     print(Fore.WHITE + "")
-    player_1_name = input("What is your name player 1? : ")                                                                                                     ### Storing player 1 name input ###
-    player_2_name = input("What is your name player 2? : ")                                                                                                     ### Storing player 2 name input ###
+    player_1_name = get_non_empty_input("What is your name player 1? : ")                                                                                                     ### Storing player 1 name input ###
+    player_2_name = get_non_empty_input("What is your name player 2? : ")                                                                                                     ### Storing player 2 name input ###
 
     player_1_board = initialise_board()                                                                                                                         ### Initialising player 1 board ###
     player_2_board = initialise_board()                                                                                                                         ### Initialising player 2 board ###
@@ -192,10 +189,14 @@ def play_game():
             player_1_score += 1                                                                                                                                 ### Player 1's score is incremented by 1 ###
         player_1_moves += 1                                                                                                                                     ### Player 1's moves are also incremented by 1 ###
 
-        if player_1_moves % 5 == 0 and player_1_moves <= max_moves:                                                                                             ### If the player moves when divided by 5 have no remainder and player moves are less than or equal to the maximum number of moves ... ###
-            move = input("Do you want to move your large ship? (Y/N)").upper()                                                                                  ### Asking whether the player wants to move their large ship. Their input is converted into uppercase. ###
+        if player_1_moves % 5 == 0 and player_1_moves <= max_moves and player_2_moves != 0:                                                                                             ### If the player moves when divided by 5 have no remainder and player moves are less than or equal to the maximum number of moves ... ###
+            move = get_non_empty_input("Do you want to move your large ship? (Y/N)").upper()                                                                                  ### Asking whether the player wants to move their large ship. Their input is converted into uppercase. ###
             if move == "Y":                                                                                                                                     ### If the answer to the question is Y, then ... ###
                 move_large_ship(player_1_board)                                                                                                                 ### The move_large_ship function is called and performs it's role of oving the ship and updating the board ###
+
+            while move != "Y" and move != "N":
+                print("Invalid input. Input only Y for yes or N for no")
+                move = get_non_empty_input("Do you want to move your large ship? (Y/N)").upper()  
 
         if check_game_over(player_2_board):                                                                                                                     ### If all ships have been hit on player 2's board ... ###
             print(f"{player_1_name} Wins!")                                                                                                                     ### Outputting the name of the player who won ###
@@ -216,10 +217,14 @@ def play_game():
         player_2_moves += 1                                                                                                                                     ### Player 1's moves are also incremented by 1 ###
 
         if player_2_moves % 5 == 0 and player_2_moves <= max_moves:                                                                                             ### If the player moves when divided by 5 have no remainder and player moves are less than or equal to the maximum number of moves ... ###
-            move = input("Do you want to move your large ship? (Y/N)").upper()                                                                                  ### Asking whether the player wants to move their large ship. Their input is converted into uppercase. ###
+            move = get_non_empty_input("Do you want to move your large ship? (Y/N)").upper()                                                                                  ### Asking whether the player wants to move their large ship. Their input is converted into uppercase. ###
             if move == "Y":                                                                                                                                     ### If the answer to the question is Y, then ... ###
                 move_large_ship(player_2_board)                                                                                                                 ### The move_large_ship function is called and performs it's role of oving the ship and updating the board ###
 
+            while move != "Y" and move != "N":
+                print("Invalid input. Input only Y for yes or N for no")
+                move = get_non_empty_input("Do you want to move your large ship? (Y/N)").upper()             
+       
         if check_game_over(player_1_board):                                                                                                                     ### If all ships have been hit on player 2's board ... ###
             print(f"{player_2_name} Wins!")                                                                                                                     ### Outputting the name of the player who won ###
             break 
@@ -245,6 +250,14 @@ def play_game():
         print("TIE")                                                                                                                                            ### Output tie ###
 
 
+### Dealing with empty inputs ###
+
+def get_non_empty_input(prompt):
+    while True:
+        user_input = input(prompt)
+        if user_input.strip():  
+            return user_input
+        print("Input cannot be empty. Please try again.")
 
 if __name__ == "__main__":
     play_game()
