@@ -1,8 +1,3 @@
-### THINGS NEEDING WORK ON ###
-
-### 4: Using generalisation for while loop in play game function
-
-
 from colorama import Fore
 
 ### Guess counts initialisation ###
@@ -175,64 +170,41 @@ def play_game():
     player_1_moves = 0                                                                                                                                          ### Setting player 1 moves to 0 ###
     player_2_moves = 0                                                                                                                                          ### Setting player 2 moves to 0 ###
 
-    max_moves = 15                                                                                                                                              ### Setting the maximum number of moves allowed to 15 ###
+    max_moves = 15      
+    
+    def player_turn(player_name, player_board, opponent_board, player_score, player_moves, max_moves):
+                
+        print(Fore.GREEN + f"{player_name}'s turn. Remaining guesses: {max_moves - player_moves}")                                                          ### Printing that it is player 1's turn and outputting remaining guesses ###
+        print(Fore.WHITE + "")
+        print_board(opponent_board, hide_ships = True)                                                                                                          ### Calling the print board function and passing in player 2's board. The ships are being hidden because we don't want player 1 to see player 2's ship locations ###
+        x, y = get_guess()                                                                                                                                      ### Storing the guess input in x and y coordinates
+        if process_guess(opponent_board, x, y):                                                                                                                 ### If a ship has been hit ... ###
+            player_score += 1                                                                                                                                 ### Player 1's score is incremented by 1 ###
+        player_moves += 1                                                                                                                                     ### Player 1's moves are also incremented by 1 ###
 
-    while True:
+        if player_moves % 5 == 0 and player_moves <= max_moves and player_moves != 0:                                                                                             ### If the player moves when divided by 5 have no remainder and player moves are less than or equal to the maximum number of moves ... ###
+            move = get_non_empty_input("Do you want to move your large ship? (Y/N)").upper()                                                                                  ### Asking whether the player wants to move their large ship. Their input is converted into uppercase. ###
+            if move == "Y":                                                                                                                                     ### If the answer to the question is Y, then ... ###
+                move_large_ship(player_board)                                                                                                                 ### The move_large_ship function is called and performs it's role of oving the ship and updating the board ### 
 
-    ### PLAYER 1 ###
+        if check_game_over(opponent_board):                                                                                                                     ### If all ships have been hit on player 2's board ... ###
+            print(f"{player_name} Wins!")                                                                                                                     ### Outputting the name of the player who won ###
+            return True, player_score, player_moves
+
+        if player_moves >= max_moves:                                                                                         ### If player 1 and player 2 move counts have reached the maximum allowance or have gone over ... ###
+            print("Game over, maximum moves reached.")                                                                                                          ### Outputting the game has ended due to maximum guesses being used up ###
+            return True, player_score, player_moves
         
-        print(Fore.GREEN + f"{player_1_name}'s turn. Remaining guesses: {max_moves - player_1_moves}")                                                          ### Printing that it is player 1's turn and outputting remaining guesses ###
-        print(Fore.WHITE + "")
-        print_board(player_2_board, hide_ships = True)                                                                                                          ### Calling the print board function and passing in player 2's board. The ships are being hidden because we don't want player 1 to see player 2's ship locations ###
-        x, y = get_guess()                                                                                                                                      ### Storing the guess input in x and y coordinates
-        if process_guess(player_2_board, x, y):                                                                                                                 ### If a ship has been hit ... ###
-            player_1_score += 1                                                                                                                                 ### Player 1's score is incremented by 1 ###
-        player_1_moves += 1                                                                                                                                     ### Player 1's moves are also incremented by 1 ###
+        return False, player_score, player_moves  
+    
+    while True:
+        game_over, player_1_score, player_1_moves = player_turn(player_1_name, player_1_board, player_2_board, player_1_score, player_1_moves, max_moves)
+        if game_over:
+            break                                                                                                                                     ### Setting the maximum number of moves allowed to 15 ###
 
-        if player_1_moves % 5 == 0 and player_1_moves <= max_moves and player_2_moves != 0:                                                                                             ### If the player moves when divided by 5 have no remainder and player moves are less than or equal to the maximum number of moves ... ###
-            move = get_non_empty_input("Do you want to move your large ship? (Y/N)").upper()                                                                                  ### Asking whether the player wants to move their large ship. Their input is converted into uppercase. ###
-            if move == "Y":                                                                                                                                     ### If the answer to the question is Y, then ... ###
-                move_large_ship(player_1_board)                                                                                                                 ### The move_large_ship function is called and performs it's role of oving the ship and updating the board ###
-
-            while move != "Y" and move != "N":
-                print("Invalid input. Input only Y for yes or N for no")
-                move = get_non_empty_input("Do you want to move your large ship? (Y/N)").upper()  
-
-        if check_game_over(player_2_board):                                                                                                                     ### If all ships have been hit on player 2's board ... ###
-            print(f"{player_1_name} Wins!")                                                                                                                     ### Outputting the name of the player who won ###
-            break 
-
-        if player_1_moves >= max_moves and player_2_moves >= max_moves:                                                                                         ### If player 1 and player 2 move counts have reached the maximum allowance or have gone over ... ###
-            print("Game over, maximum moves reached.")                                                                                                          ### Outputting the game has ended due to maximum guesses being used up ###
+        game_over, player_2_score, player_2_moves = player_turn(player_2_name, player_2_board, player_1_board, player_2_score, player_2_moves, max_moves)
+        if game_over:
             break
-
-    ### PLAYER 2 ###
-
-        print(Fore.GREEN + f"{player_2_name}'s turn. Remaining guesses: {max_moves - player_2_moves}")                                                          ### Printing that it is player 1's turn and outputting remaining guesses ###
-        print(Fore.WHITE + "")
-        print_board(player_1_board, hide_ships = True)                                                                                                          ### Calling the print board function and passing in player 2's board. The ships are being hidden because we don't want player 1 to see player 2's ship locations ###
-        x, y = get_guess()                                                                                                                                      ### Storing the guess input in x and y coordinates
-        if process_guess(player_1_board, x, y):                                                                                                                 ### If a ship has been hit ... ###
-            player_2_score += 1                                                                                                                                 ### Player 1's score is incremented by 1 ###
-        player_2_moves += 1                                                                                                                                     ### Player 1's moves are also incremented by 1 ###
-
-        if player_2_moves % 5 == 0 and player_2_moves <= max_moves:                                                                                             ### If the player moves when divided by 5 have no remainder and player moves are less than or equal to the maximum number of moves ... ###
-            move = get_non_empty_input("Do you want to move your large ship? (Y/N)").upper()                                                                                  ### Asking whether the player wants to move their large ship. Their input is converted into uppercase. ###
-            if move == "Y":                                                                                                                                     ### If the answer to the question is Y, then ... ###
-                move_large_ship(player_2_board)                                                                                                                 ### The move_large_ship function is called and performs it's role of oving the ship and updating the board ###
-
-            while move != "Y" and move != "N":
-                print("Invalid input. Input only Y for yes or N for no")
-                move = get_non_empty_input("Do you want to move your large ship? (Y/N)").upper()             
-       
-        if check_game_over(player_1_board):                                                                                                                     ### If all ships have been hit on player 2's board ... ###
-            print(f"{player_2_name} Wins!")                                                                                                                     ### Outputting the name of the player who won ###
-            break 
-
-        if player_1_moves >= max_moves and player_2_moves >= max_moves:                                                                                         ### If player 1 and player 2 move counts have reached the maximum allowance or have gone over ... ###
-            print("Game over, maximum moves reached.")                                                                                                          ### Outputting the game has ended due to maximum guesses being used up ###
-            break
-
 
     ### Dealing with scoring system ###
 
